@@ -186,7 +186,7 @@ document.addEventListener("DOMContentLoaded", () => {
     require.config({
         paths: {
             vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.39.0/min/vs',
-            alasql: 'node_modules/alasql/dist/alasql.min'
+            alasql: 'https://cdnjs.cloudflare.com/ajax/libs/alasql/4.17.3/alasql.min'
         }
     });
 
