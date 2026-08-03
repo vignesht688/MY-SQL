@@ -420,8 +420,26 @@ function executeQuery() {
     } catch(e) {}
     
     try {
+        // Parse the query to check statement count
+        const parsed = alasql.parse(query);
+        const statementCount = parsed.statements ? parsed.statements.length : 1;
+        
         // AlaSQL executes queries
-        result = alasql(query);
+        const rawResult = alasql(query);
+        
+        if (statementCount > 1 && Array.isArray(rawResult)) {
+            // Find the most relevant result (like a SELECT array of objects) or default to the last statement's result
+            let displayResult = rawResult[rawResult.length - 1];
+            for (let i = rawResult.length - 1; i >= 0; i--) {
+                if (Array.isArray(rawResult[i]) && rawResult[i].length > 0 && typeof rawResult[i][0] === 'object') {
+                    displayResult = rawResult[i];
+                    break;
+                }
+            }
+            result = displayResult;
+        } else {
+            result = rawResult;
+        }
     } catch (err) {
         error = err.message || err;
     }
