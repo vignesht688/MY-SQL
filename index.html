@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antigravity SQL Playground - Practice MySQL Syntax</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Style -->
+    <link rel="stylesheet" href="style.css?v=99">
+    <!-- Monaco Editor AMD Loader -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.39.0/min/vs/loader.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo">
+                <i class="fa-solid fa-database database-logo"></i>
+                <div class="logo-text">
+                    <h1>Antigravity SQL</h1>
+                    <span>Playground &amp; Practice Arena</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <div class="db-selector-wrapper">
+                    <label for="db-select"><i class="fa-solid fa-server"></i> Database:</label>
+                    <select id="db-select">
+                        <option value="company">Company &amp; Employees</option>
+                        <option value="shop">E-Commerce Store</option>
+                    </select>
+                </div>
+                <button id="reset-db-btn" class="btn btn-secondary" title="Reset current database to initial state">
+                    <i class="fa-solid fa-rotate-left"></i> Reset DB
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Workspace -->
+        <div class="workspace">
+            <!-- Sidebar (Left) -->
+            <aside class="sidebar">
+                <div class="sidebar-tabs">
+                    <button class="sidebar-tab active" data-tab="schema">
+                        <i class="fa-solid fa-sitemap"></i> Schema
+                    </button>
+                    <button class="sidebar-tab" data-tab="challenges">
+                        <i class="fa-solid fa-trophy"></i> Challenges
+                    </button>
+                </div>
+
+                <div class="sidebar-content">
+                    <!-- Schema Tab -->
+                    <div id="tab-schema" class="tab-pane active">
+                        <div class="schema-explorer">
+                            <p class="section-title">Database Schema Tree</p>
+                            <div id="schema-tree" class="tree">
+                                <!-- Populated dynamically -->
+                                <div class="loading-placeholder">
+                                    <i class="fa-solid fa-circle-notch fa-spin"></i> Loading schema...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Challenges Tab -->
+                    <div id="tab-challenges" class="tab-pane">
+                        <div class="challenges-container">
+                            <div class="challenges-header">
+                                <span class="section-title">Practice Challenges</span>
+                                <span class="progress-badge"><span id="solved-count">0</span>/<span id="total-count">0</span> Solved</span>
+                            </div>
+                            <div id="challenges-list" class="challenges-list">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Work Area (Center & Right) -->
+            <main class="editor-results-container">
+                <!-- Top: Editor Section -->
+                <div class="editor-section">
+                    <div class="panel-header">
+                        <div class="panel-title">
+                            <i class="fa-solid fa-code"></i> SQL Query Editor
+                        </div>
+                        <div class="editor-actions">
+                            <button id="run-query-btn" class="btn btn-primary">
+                                <i class="fa-solid fa-play"></i> Run Query (Ctrl+Enter)
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Code Editor Placeholder -->
+                    <div id="editor-container" class="editor-container"></div>
+                </div>
+
+                <!-- Bottom: Results & History Section -->
+                <div class="results-section">
+                    <div class="results-tabs-wrapper">
+                        <div class="results-tabs">
+                            <button class="results-tab active" data-tab="output">
+                                <i class="fa-solid fa-table"></i> Output
+                            </button>
+                            <button class="results-tab" data-tab="history">
+                                <i class="fa-solid fa-history"></i> History
+                            </button>
+                        </div>
+                        <div id="challenge-status-banner" class="challenge-status-banner hidden">
+                            <!-- Challenge instructions/status displayed here if a challenge is active -->
+                        </div>
+                    </div>
+
+                    <div class="results-content">
+                        <!-- Output Pane -->
+                        <div id="tab-output" class="results-pane active">
+                            <div id="query-success-msg" class="success-message hidden">
+                                <i class="fa-solid fa-circle-check"></i> <span id="success-text">Query executed successfully.</span>
+                            </div>
+                            <div id="query-error-msg" class="error-message hidden">
+                                <i class="fa-solid fa-circle-exclamation"></i> <span id="error-text">Syntax error near line 1.</span>
+                            </div>
+                            <div id="results-table-container" class="results-table-container">
+                                <div class="empty-state">
+                                    <i class="fa-solid fa-terminal"></i>
+                                    <p>Write your query and click <strong>Run Query</strong> to see results.</p>
+                                    <p class="hint">Type <code>SELECT * FROM employees;</code> to start experimenting.</p>
+                                </div>
+                            </div>
+                            <div class="query-meta hidden" id="query-meta">
+                                <span id="row-count">0 rows returned</span> &bull; <span id="execution-time">0ms</span>
+                            </div>
+                        </div>
+
+                        <!-- History Pane -->
+                        <div id="tab-history" class="results-pane">
+                            <div id="history-list" class="history-list">
+                                <!-- Populated dynamically -->
+                                <div class="empty-history">
+                                    <p>No queries executed yet in this session.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <!-- Script -->
+    <script src="app.js?v=99"></script>
+</body>
+</html>
